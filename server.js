@@ -630,7 +630,7 @@ app.post('/QuizAnswerForUser/:aid', (req, res) => {
                 console.error(err.message);
                 res.status(500).send('Internal server error');
               } else {
-                res.status(200).send({"status": "GOOD" , explanation})
+                res.status(200).send({"status": "GOOD" , explanation, correct, "your": AnswerUser})
               }
             });
           }
