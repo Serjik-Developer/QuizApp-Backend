@@ -376,19 +376,19 @@ else {
 app.put('/QuizAnswer/:aid', (req, res) => {
   if (req.user.role == "admin") {
   const { aid } = req.params;
-  const { text, explanation, trueQustion, image } = req.body;
+  const { text, explanation, trueQustion } = req.body;
   if (!explanation|| !trueQustion) {
     res.status(400).send('New question and type are required');
   } else {
-    const sql = 'UPDATE Answers SET text = ?, explanation = ?, true = ?, image = ? WHERE aid = ?';
-    db.run(sql, [text, explanation, trueQustion, image, aid], function(err) {
+    const sql = 'UPDATE Answers SET text = ?, explanation = ?, true = ? WHERE aid = ?';
+    db.run(sql, [text, explanation, trueQustion, aid], function(err) {
       if (err) {
         console.error(err.message);
         res.status(500).send('Internal server error');
       } else if (this.changes === 0) {
         res.status(404).send('Answer not found');
       } else {
-        res.status(200).send({ text, explanation, trueQustion, image, aid });
+        res.status(200).send({ text, explanation, trueQustion, aid });
       }
     });
   }
@@ -444,7 +444,7 @@ else {
 app.post('/QuizAnswer/:qid', (req, res) => {
   if (req.user.role == "admin") {
   const { qid } = req.params;
-  const { Text, Explanation, True, Image} = req.body;
+  const { Text, Explanation, True} = req.body;
 
   db.get('SELECT * FROM Questions WHERE qid = ?', [qid], (err, row) => {
     if (err) {
@@ -461,16 +461,16 @@ app.post('/QuizAnswer/:qid', (req, res) => {
         if (type =="InputString" || type == "InputInt" || type== "RadioButton" || type == "MultiChoiseImage") {
 
         
-        if ((type != "MultiChoiseImage" && Text != null) || (type=="MultiChoiseImage" && Image!=null)) {
+        if ((type != "MultiChoiseImage") || (type=="MultiChoiseImage")) {
 
         
-        const sql = 'INSERT INTO Answers(qid, aid, text, explanation, true, image) VALUES (?, ?, ?, ?, ?, ?)';
-        db.run(sql, [qid , aid, Text, Explanation, True, Image], function(err) {
+        const sql = 'INSERT INTO Answers(qid, aid, text, explanation, true) VALUES (?, ?, ?, ?, ?)';
+        db.run(sql, [qid , aid, Text, Explanation, True], function(err) {
           if (err) {
             console.error(err.message);
             res.status(500).send('Internal server error');
           } else {
-            res.status(201).send({ qid , aid, Text, Explanation, True, Image });
+            res.status(201).send({ qid , aid, Text, Explanation, True });
           }
         });
       }
