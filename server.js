@@ -133,7 +133,7 @@ app.post('/auth', (req, res) => {
 
 //GET INFO ABOUT CURRENT USER
 app.get('/user', (req, res) => {
-    if (req.user) return res.status(200).json( {login: req.user.login, exp: req.user.exp});
+    if (req.user) return res.status(200).json( {login: req.user.login, exp: req.user.exp, role: req.user.role});
     else
         return res
             .status(401)
