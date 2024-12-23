@@ -347,22 +347,20 @@ else {
 app.put('/QuizQuestion/:qid', (req, res) => {
   if (req.user.role == "admin") {
   const { qid } = req.params;
-  const { question, type } = req.body;
-  if (!question || !type) {
+  const { question } = req.body;
+  if (!question) {
     res.status(400).send('New question and type are required');
   } 
-  else if (type != "InputString" && type != "InputInt" && type!= "RadioButton" && type != "MultiChoiseImage") {
-    res.status(400).send('unknown type');
-  }else {
-    const sql = 'UPDATE Questions SET question = ?, type = ? WHERE qid = ?';
-    db.run(sql, [question, type, qid], function(err) {
+  else {
+    const sql = 'UPDATE Questions SET question = ? WHERE qid = ?';
+    db.run(sql, [question, qid], function(err) {
       if (err) {
         console.error(err.message);
         res.status(500).send('Internal server error');
       } else if (this.changes === 0) {
         res.status(404).send('Question not found');
       } else {
-        res.status(200).send({ question, type, qid });
+        res.status(200).send({ question, qid });
       }
     });
   }
