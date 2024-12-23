@@ -295,11 +295,11 @@ app.get('/QuestionsAdmin/:id', (req, res) => {
   }
 });
 
-// GET ALL ABOUT QUIZ QUESTIONS BY QUIZ ID
+// GET ALL ABOUT QUIZ ANSWERS BY QUIZ ID
 app.get('/AnswersAdmin/:qid', (req, res) => {
   if (req.user.role == "admin") {
     const { qid } = req.params;
-  db.all('SELECT * FROM Questions WHERE qid = ?',[qid], (err, rows) => {
+  db.all('SELECT * FROM Answers WHERE qid = ?',[qid], (err, rows) => {
     if (err) {
       console.error(err.message);
       res.status(500).json({ message: 'Internal server error'});
