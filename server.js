@@ -295,7 +295,24 @@ app.get('/QuestionsAdmin/:id', (req, res) => {
   }
 });
 
-
+// GET ALL ABOUT QUIZ QUESTIONS BY QUIZ ID
+app.get('/AnswersAdmin/:qid', (req, res) => {
+  if (req.user.role == "admin") {
+    const { qid } = req.params;
+  db.all('SELECT * FROM Questions WHERE qid = ?',[qid], (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      res.status(500).json({ message: 'Internal server error'});
+    } else {
+      res.status(200).send(rows);
+    }
+  });}
+  else {
+    return res
+    .status(401)
+    .json({ message: 'Not authorized' });
+  }
+});
 // DELETE QuizQuestion by Question ID
 
 app.delete('/QuizQuestion/:qid', (req, res) => {
